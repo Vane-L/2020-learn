@@ -5,7 +5,7 @@
 ![](.images/Data图.png)
 
 #### Structured Streaming
-```
+```scala
 // 创建一个 SparkSession 程序入口
 val spark = SparkSession.builder().master("localhost").getOrCreate()  
 // 将 input_dir 里的内容创建为 Dataset/DataFrame，即 input table

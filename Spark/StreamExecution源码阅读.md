@@ -19,14 +19,14 @@
 - 用于记录可用的offset，但不提交到sink
 - 只能被scheduler thread修改这个值，并且只能原子步骤
 - 如果其他线程需要访问这个值时，应该进行浅复制
-```
+```scala
   @volatile
   var availableOffsets = new StreamProgress
 ```
 
 #### queryExecutionThread
 - 运行stream的微批处理的线程
-```
+```scala
   val queryExecutionThread: QueryExecutionThread =
     new QueryExecutionThread(s"stream execution thread for $prettyIdString") {
       override def run(): Unit = {
