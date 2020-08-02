@@ -1,8 +1,8 @@
 #### RDD vs Dataset/DataFrame
-![](.images/数据结构图.png)
+![](../.images/数据结构图.png)
 
 #### Structured Data vs Streaming Data
-![](.images/Data图.png)
+![](../.images/Data图.png)
 
 #### Structured Streaming
 ```scala

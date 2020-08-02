@@ -4,7 +4,7 @@
 - logicalPlan: DataFrame/Dataset 的一系列变换
 - sink: 最终结果写出的接收端
 
-![](.images/持续查询.png)
+![](../.images/持续查询.png)
 
 1. StreamExecution 通过 _Source.getOffset()_ 获取最新的 offsets，即最新的数据进度；
 2. StreamExecution 将 offsets 等写入到 **offsetLog** 里
