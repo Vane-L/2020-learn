@@ -18,7 +18,6 @@ DStream 和 RDD 的关系 :
   def slideDuration: Duration
 
 // JobGenerator 维护了一个定时器，周期是 batchDuration，定时为每个 batch 生成 RDD DAG 的实例。
-/** Generate jobs and perform checkpointing for the given `time`.  */
   private def generateJobs(time: Time): Unit = {
     // Checkpoint all RDDs marked for checkpointing to ensure their lineages are
     // truncated periodically. Otherwise, we may run into stack overflows (SPARK-6847).
@@ -101,17 +100,29 @@ private val receivedBlockHandler: ReceivedBlockHandler = {
 模块 4：长时容错
 -
 保障模块 1 和 2 需要在 **driver** 端完成，保障模块 3 需要在 **executor** 端和 **driver** 端完成。
-- **executor 端长时容错**
+- **executor 端容错**
     1. 热备：热备是指在存储块数据时，将其存储到本 executor、并同时 replicate 到另外一个 executor 上去。这样在一个 replica 失效后，可以立刻无感知切换到另一份 replica 进行计算。
-        - 实现方式是，在实现自己的 Receiver 时，即指定一下 StorageLevel 为 MEMORY_ONLY_2 或 MEMORY_AND_DISK_2 就可以了。
-    2. 冷备：冷备是每次存储块数据前，先把块数据作为 log 写出到 WriteAheadLog 里，再存储到本 executor。
-        - executor 失效时，就由另外的 executor 去读 WAL，再重做 log 来恢复块数据。WAL 通常写到可靠存储如 HDFS 上，所以恢复时可能需要一段 recover time。
+        - 实现方式：在实现自己的 Receiver 时，即指定一下 StorageLevel 为 MEMORY_ONLY_2 或 MEMORY_AND_DISK_2
+        - Receiver 收到的数据，通过 ReceiverSupervisorImpl，将数据交给 BlockManager 存储；而 BlockManager 本身支持将数据 replicate() 到另外的 executor 上，这样就完成了 Receiver 源头数据的热备过程。
+        - 而在计算时，计算任务首先将获取需要的块数据，这时如果一个 executor 失效导致一份数据丢失，那么计算任务将转而向另一个 executor 上的同一份数据获取数据。**因为另一份块数据是现成的、不需要像冷备那样重新读取的，所以这里不会有 recovery time。** 
+    2. 冷备：冷备是每次存储块数据前，先把块数据作为 log 写出到 WriteAheadLog 里，再存储到本 executor。当executor 失效时，就由另外的 executor 去读 WAL，再重做 log 来恢复块数据。**WAL 通常写到可靠存储如 HDFS 上，所以恢复时可能需要一段 recover time**
+        - WriteAheadLog 的特点是顺序写入，所以在做数据备份时效率较高，但在需要恢复数据时又需要顺序读取，所以需要一定 recovery time。
     3. 重放：如果上游支持重放，比如 Apache Kafka，那么就可以选择不用热备或者冷备来另外存储数据了，而是在失效时换一个 executor 进行数据重放即可。
+        - 基于 Receiver 的
+          - 这种是将 Kafka Consumer 的偏移管理交给 Kafka —— 失效后由 Kafka 去基于 offset 进行重放
+          - 问题：Kafka 将同一个 offset 的数据，重放给两个 batch 实例 —— 从而只能保证 **at least once** 的语义
+        - Direct 方式，不基于 Receiver
+          - 由 Spark Streaming 直接管理 offset —— 可以给定 offset 范围，直接去 Kafka 的硬盘上读数据，使用 Spark Streaming 自身的均衡来代替 Kafka 做的均衡
+          - 保证每个 offset 范围属于且只属于一个 batch，从而保证 **exactly-once**
     4. 忽略：最后，如果应用的实时性需求大于准确性，那么一块数据丢失后我们也可以选择忽略、不恢复失效的source数据。
 
-- **driver 端长时容错**
-    1. 块数据的 meta 信息上报到 ReceiverTracker(模块3)，然后交给 ReceivedBlockTracker 做具体的管理。ReceivedBlockTracker 也采用 WAL 冷备方式进行备份，在 driver 失效后，由新的 ReceivedBlockTracker 读取 WAL 并恢复 block 的 meta 信息。
-    2. 需要定时对 DStreamGraph(模块1) 和 JobScheduler(模块2) 做 Checkpoint，来记录整个 DStreamGraph 的变化、和每个 batch 的 job 的完成情况。
+- **driver 端容错**
+    1. WAL冷备：块数据的 meta 信息上报到 ReceiverTracker(模块3)，然后交给 ReceivedBlockTracker 做具体的管理。ReceivedBlockTracker 也采用 WAL 冷备方式进行备份，在 driver 失效后，由新的 ReceivedBlockTracker 读取 WAL 并恢复 block 的 meta 信息。
+        - BlockAdditionEvent, BatchAllocationEvent, BatchCleanupEvent 这三种消息都会被保存到 WAL 里。
+    2. Checkpoint冷备：需要定时对 DStreamGraph(模块1) 和 JobScheduler(模块2) 做 Checkpoint，来记录整个 DStreamGraph 的变化、和每个 batch 的 job 的完成情况。
         - 注意到这里采用的是完整 checkpoint 的方式，和之前的 WAL 的方式都不一样。Checkpoint 通常也是落地到可靠存储如 HDFS。
         - Checkpoint 发起的间隔默认的是和 batchDuration 一致；即每次 batch 发起、提交了需要运行的 job 后就做 Checkpoint，另外在 job 完成了更新任务状态的时候再次做一下 Checkpoint。
         - 这样一来，在 driver 失效并恢复后，可以读取最近一次的 Checkpoint 来恢复作业的 DStreamGraph 和 job 的运行及完成状态。
+        - 发送DoCheckpoint 消息
+            - JobGenerator.generateJob() : `eventLoop.post(DoCheckpoint(time, clearCheckpointDataLater = false))`
+            - JobGenerator.onBatchCompletion
