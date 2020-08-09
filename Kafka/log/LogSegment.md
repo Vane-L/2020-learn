@@ -109,7 +109,9 @@ class LogSegment private[log] (val log: FileRecords,
 ```
 
 ### recover方法
-- 
+- 清空索引文件
+- 重新创建索引文件
+- 最后，进行文件截断
 ```scala
   @nonthreadsafe
   def recover(producerStateManager: ProducerStateManager, leaderEpochCache: Option[LeaderEpochFileCache] = None): Int = {
