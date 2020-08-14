@@ -1,3 +1,4 @@
+```java
 package org.apache.shardingsphere.sharding.algorithm.keygen;
 
 import com.google.common.base.Preconditions;
@@ -147,3 +148,5 @@ public final class SnowflakeKeyGenerateAlgorithm implements KeyGenerateAlgorithm
         return "SNOWFLAKE";
     }
 }
+
+```
