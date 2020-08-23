@@ -25,7 +25,7 @@
 4. RAM persist to disk
 5. read RAM
 
-###What is WAL?
+### What is WAL?
 - append-only & order by time
 - 提高性能
     - 减少磁盘写
