@@ -1,5 +1,15 @@
 ### ControllerContext
-
+- stats: 状态信息
+- offlinePartitionCount: 离线分区数量
+- shuttingDownBrokerIds: 正在关闭中的Broker列表
+- liveBrokers: 当前运行中的Broker列表
+- allTopics: 所有topic列表
+- partitionAssignments: topic分区的副本分配情况
+- partitionLeadershipInfo: 主题分区的leader信息
+- partitionsBeingReassigned: 重新分配的分区列表
+- partitionStates: 分区状态信息
+- replicaStates: 副本状态信息
+- topicsToBeDeleted: 待删除的topic列表
 ```scala
 class ControllerContext {
   val stats = new ControllerStats // 状态信息
