@@ -1,4 +1,5 @@
 ### PartitionStateMachine 分区状态机
+![](../.kafka_images/分区状态转换图.png)
 #### PartitionState
 1. NonExistentPartition: 未创建或已删除的分区
     - 前置状态为 OfflinePartition
