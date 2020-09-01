@@ -1,6 +1,7 @@
 package com.liang.code;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class BackTrack {
         new BackTrack().permutation("qwe");
         new BackTrack().subsets(new int[]{1, 2, 3});
         new BackTrack().permute(new int[]{1, 2, 3});
+        new BackTrack().combine(4, 3);
     }
 
     public List<String> generateParenthesis(int n) {
@@ -95,6 +97,24 @@ public class BackTrack {
                 used[i] = false;
                 arrayList.remove(arrayList.size() - 1);
             }
+        }
+    }
+
+    // 1234 -> 12 13 14 23 24 34
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        back(res, n, k, 1, new LinkedList<Integer>());
+        return res;
+    }
+
+    private void back(List<List<Integer>> res, int n, int k, int first, LinkedList<Integer> integers) {
+        if (integers.size() == k) {
+            res.add(new ArrayList<>(integers));
+        }
+        for (int i = first; i <= n; i++) {
+            integers.add(i);
+            back(res, n, k, i + 1, integers);
+            integers.removeLast();
         }
     }
 }
