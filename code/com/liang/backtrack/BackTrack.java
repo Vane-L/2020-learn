@@ -1,6 +1,7 @@
 package com.liang.backtrack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class BackTrack {
         new BackTrack().subsets(new int[]{1, 2, 3});
         new BackTrack().permute(new int[]{1, 2, 3});
         new BackTrack().combine(4, 3);
+        new BackTrack().numTilePossibilities("AAB");
+        new BackTrack().subsetsWithDup(new int[]{1, 2, 2});
     }
 
     public List<String> generateParenthesis(int n) {
@@ -115,6 +118,51 @@ public class BackTrack {
             integers.add(i);
             back(res, n, k, i + 1, integers);
             integers.removeLast();
+        }
+    }
+
+    // 输入："AAB"
+    // 输出：8
+    // 解释：可能的序列为 "A", "B", "AA", "AB", "BA", "AAB", "ABA", "BAA"。
+    public int numTilePossibilities(String tiles) {
+        int[] counter = new int[26];
+        for (int i = 0; i < tiles.length(); i++)
+            counter[tiles.charAt(i) - 'A']++;
+        int res = dfs(counter);
+        return res;
+    }
+
+    private int dfs(int[] counter) {
+        int sum = 0;
+        for (int i = 0; i < 26; i++) {
+            if (counter[i] > 0) {
+                sum++;
+                counter[i]--;
+                sum += dfs(counter);
+                counter[i]++;
+            }
+        }
+        return sum;
+    }
+
+    // 输入: [1,2,2]
+    // 输出: [[2],[1],[1,2,2],[2,2],[1,2],[]]
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> lists = new ArrayList<>();
+        Arrays.sort(nums);
+        back(lists, nums, 0, new ArrayList<>());
+        return lists;
+    }
+
+    private void back(List<List<Integer>> lists, int[] nums, int first, List<Integer> tmp) {
+        lists.add(new ArrayList<>(tmp));
+        for (int i = first; i < nums.length; i++) {
+            if (i > first && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            tmp.add(nums[i]);
+            back(lists, nums, i + 1, tmp);
+            tmp.remove(tmp.size() - 1);
         }
     }
 }
