@@ -1,4 +1,4 @@
-package com.liang.code;
+package com.liang.tree;
 
 import java.util.HashMap;
 import java.util.Map;

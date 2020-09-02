@@ -1,4 +1,4 @@
-package com.liang.code;
+package com.liang.backtrack;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

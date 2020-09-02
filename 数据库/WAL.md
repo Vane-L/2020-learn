@@ -42,12 +42,12 @@
     - crash之后重启，会比较WAL的data和database的data
     - roll back uncommitted data in WAL
     - apply committed data in WAL but not in database
-![](.数据库_images/InnoDB架构.png)
+![](.database_images/InnoDB架构.png)
 - Buffer Management Policies
     - COMMITTED write : Force & No-Force(redo)
     - UNCOMMITTED write : No-Steal & Steal(undo)
     - 建议Steal & No-Force 
-![](.数据库_images/buffer management.png)
+![](.database_images/buffer management.png)
 - ARIES算法
     - physical logging : _Page 24;image at 367,2;before:'we';after:'Wa'_
     - logical logging : _Student:update(2,'wengwu'=>'Wangwu')_
@@ -67,7 +67,7 @@
             - Log Record: [preLSN, TransID, type]
             - Update Log Record: [preLSN, TransID, "update", pageID, redoInfo, undoInfo]
             - Compensation Log Record: [preLSN, TransID, “compensation”, redoTheUndoInfo, undoNextLSN]
-![](.数据库_images/RedoUndoLog.png)    
+![](.database_images/RedoUndoLog.png)    
 - innodb_flush_log_at_trx_commit
     - 1: disk(推荐)
     - 2: FileSystem Buffer
@@ -93,5 +93,5 @@
     2. existing in-memory segments committed to the disk
     3. new commit point write to the disk
     4. clears the old translog
-![](.数据库_images/RefreshFlush.png)
+![](.database_images/RefreshFlush.png)
     
