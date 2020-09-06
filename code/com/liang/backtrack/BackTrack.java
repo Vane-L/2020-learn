@@ -17,6 +17,9 @@ public class BackTrack {
         new BackTrack().combine(4, 3);
         new BackTrack().numTilePossibilities("AAB");
         new BackTrack().subsetsWithDup(new int[]{1, 2, 2});
+        new BackTrack().permutation08("qqe");
+        new BackTrack().combinationSum3(3, 9);
+        new BackTrack().combinationSum(new int[]{2, 3, 5}, 8);
     }
 
     public List<String> generateParenthesis(int n) {
@@ -42,6 +45,7 @@ public class BackTrack {
         }
     }
 
+    /*----------------------------------------------------------------------*/
     public String[] permutation(String str) {
         if (str.length() == 0)
             return new String[0];
@@ -65,6 +69,7 @@ public class BackTrack {
         }
     }
 
+    /*----------------------------------------------------------------------*/
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         backtrack(res, nums, new ArrayList(), 0);
@@ -80,6 +85,7 @@ public class BackTrack {
         }
     }
 
+    /*----------------------------------------------------------------------*/
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         boolean[] used = new boolean[nums.length];
@@ -103,6 +109,7 @@ public class BackTrack {
         }
     }
 
+    /*----------------------------------------------------------------------*/
     // 1234 -> 12 13 14 23 24 34
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> res = new ArrayList<>();
@@ -121,6 +128,7 @@ public class BackTrack {
         }
     }
 
+    /*----------------------------------------------------------------------*/
     // 输入："AAB"
     // 输出：8
     // 解释：可能的序列为 "A", "B", "AA", "AB", "BA", "AAB", "ABA", "BAA"。
@@ -145,6 +153,7 @@ public class BackTrack {
         return sum;
     }
 
+    /*----------------------------------------------------------------------*/
     // 输入: [1,2,2]
     // 输出: [[2],[1],[1,2,2],[2,2],[1,2],[]]
     public List<List<Integer>> subsetsWithDup(int[] nums) {
@@ -163,6 +172,88 @@ public class BackTrack {
             tmp.add(nums[i]);
             back(lists, nums, i + 1, tmp);
             tmp.remove(tmp.size() - 1);
+        }
+    }
+
+    /*----------------------------------------------------------------------*/
+    public String[] permutation08(String S) {
+        List<String> res = new ArrayList<>();
+        boolean[] used = new boolean[S.length()];
+        char[] chars = S.toCharArray();
+        Arrays.sort(chars);
+        back(res, used, chars, "");
+        return res.toArray(new String[res.size()]);
+    }
+
+    private void back(List<String> res, boolean[] used, char[] chars, String tmp) {
+        if (tmp.length() == chars.length) {
+            res.add(tmp);
+            return;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (!used[i]) {
+                if (i > 0 && chars[i] == chars[i - 1] && !used[i - 1]) {
+                    continue;
+                }
+                used[i] = true;
+                back(res, used, chars, tmp + chars[i]);
+                used[i] = false;
+            }
+        }
+    }
+
+    /*----------------------------------------------------------------------*/
+    //输入: k = 3, n = 9
+    //输出: [[1,2,6], [1,3,5], [2,3,4]]
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        boolean[] used = new boolean[10];
+        backSum3(res, k, n, used, new ArrayList<>(), 1);
+        return res;
+    }
+
+    private void backSum3(List<List<Integer>> res, int k, int n, boolean[] used, ArrayList<Integer> tmp, int cur) {
+        if (n == 0 && k == 0) {
+            res.add(new ArrayList<>(tmp));
+            return;
+        }
+        for (int i = cur; i <= 9; i++) {
+            if (n - i < 0 || used[i]) {
+                break;
+            }
+            tmp.add(i);
+            used[i] = true;
+            backSum3(res, k - 1, n - i, used, tmp, cur + 1);
+            used[i] = false;
+            tmp.remove(tmp.size() - 1);
+        }
+    }
+
+    /*----------------------------------------------------------------------*/
+    //输入：candidates = [2,3,5], target = 8,
+    //所求解集为：
+    //[ [2,2,2,2],[2,3,3],[3,5] ]
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> res = new ArrayList<>();
+        backSum(res, candidates, target, new ArrayList<Integer>(), 0, 0);
+        return res;
+    }
+
+    private void backSum(List<List<Integer>> res, int[] candidates, int target, ArrayList<Integer> tmp, int cur, int start) {
+        if (target == cur) {
+            res.add(new ArrayList<>(tmp));
+            return;
+        }
+        for (int i = start; i < candidates.length; i++) {
+            if (cur + i > target) {
+                break;
+            }
+            cur += candidates[i];
+            tmp.add(candidates[i]);
+            backSum(res, candidates, target, tmp, cur, i);
+            tmp.remove(tmp.size() - 1);
+            cur -= candidates[i];
         }
     }
 }
