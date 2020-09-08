@@ -1,7 +1,9 @@
 package com.liang.backtrack;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,6 +122,7 @@ public class BackTrack {
     private void back(List<List<Integer>> res, int n, int k, int first, LinkedList<Integer> integers) {
         if (integers.size() == k) {
             res.add(new ArrayList<>(integers));
+            return;
         }
         for (int i = first; i <= n; i++) {
             integers.add(i);
@@ -127,6 +130,21 @@ public class BackTrack {
             integers.removeLast();
         }
     }
+
+    private void backGood(List<List<Integer>> res, int n, int k, int first, LinkedList<Integer> integers) {
+        if (integers.size() == k) {
+            res.add(new ArrayList<>(integers));
+            return;
+        }
+        // 搜索起点的上界 + 接下来要选择的元素个数 - 1 = n
+        // 选择的元素个数 = k - path.size()
+        for (int i = first; i <= n + 1 - (k - integers.size()); i++) {
+            integers.add(i);
+            backGood(res, n, k, i + 1, integers);
+            integers.removeLast();
+        }
+    }
+
 
     /*----------------------------------------------------------------------*/
     // 输入："AAB"
