@@ -70,7 +70,41 @@ public abstract class Buffer {
 - A selector is an object that can monitor multiple channels for events. Thus, a single thread can monitor multiple channels for data.
 
 #### Selectors
+Four events
+1. SelectionKey.OP_CONNECT
+2. SelectionKey.OP_ACCEPT
+3. SelectionKey.OP_READ
+4. SelectionKey.OP_WRITE
 
+Three methods返回已ready的通道数
+1. int select()：blocks until at least one channel is ready for the events you registered for.
+2. int select(long timeout)：it blocks for a maximum of timeout milliseconds
+3. int selectNow()：**doesn't block at all.** It returns immediately with whatever channels are ready.
+```java
+Selector selector = Selector.open();
+channel.configureBlocking(false);
+SelectionKey key = channel.register(selector, SelectionKey.OP_READ);
+
+while(true) {
+  int readyChannels = selector.selectNow();
+  if(readyChannels == 0) continue;
+  Set<SelectionKey> selectedKeys = selector.selectedKeys();
+  Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+  while(keyIterator.hasNext()) {
+    SelectionKey key = keyIterator.next();
+    if(key.isAcceptable()) {
+        // a connection was accepted by a ServerSocketChannel.
+    } else if (key.isConnectable()) {
+        // a connection was established with a remote server.
+    } else if (key.isReadable()) {
+        // a channel is ready for reading
+    } else if (key.isWritable()) {
+        // a channel is ready for writing
+    }
+    keyIterator.remove();
+  }
+}
+```
 
 ```java
 public static void main(String[] args) throws IOException {
