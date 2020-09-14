@@ -1,9 +1,7 @@
 package com.liang.backtrack;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +20,9 @@ public class BackTrack {
         new BackTrack().permutation08("qqe");
         new BackTrack().combinationSum3(3, 9);
         new BackTrack().combinationSum(new int[]{2, 3, 5}, 8);
+        System.out.println(new BackTrack().exist(new char[][]{{'a', 'b'}, {'c', 'd'}}, "abcd"));
+        System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcced"));
+        System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcb"));
     }
 
     public List<String> generateParenthesis(int n) {
@@ -274,4 +275,33 @@ public class BackTrack {
             cur -= candidates[i];
         }
     }
+
+    /*----------------------------------------------------------------------*/
+    public boolean exist(char[][] board, String word) {
+        char[] chars = word.toCharArray();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (backWord(board, chars, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean backWord(char[][] board, char[] word, int i, int j, int idx) {
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] != word[idx]) {
+            return false;
+        }
+        if (idx == word.length - 1) {
+            return true;
+        }
+        char tmp = board[i][j];
+        board[i][j] = '#';
+        boolean flag = backWord(board, word, i + 1, j, idx + 1) || backWord(board, word, i, j + 1, idx + 1)
+                || backWord(board, word, i - 1, j, idx + 1) || backWord(board, word, i, j - 1, idx + 1);
+        board[i][j] = tmp;
+        return flag;
+    }
+
 }
