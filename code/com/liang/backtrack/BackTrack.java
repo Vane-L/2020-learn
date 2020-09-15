@@ -23,6 +23,7 @@ public class BackTrack {
         System.out.println(new BackTrack().exist(new char[][]{{'a', 'b'}, {'c', 'd'}}, "abcd"));
         System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcced"));
         System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcb"));
+        new BackTrack().partition("aab");
     }
 
     public List<String> generateParenthesis(int n) {
@@ -302,6 +303,39 @@ public class BackTrack {
                 || backWord(board, word, i - 1, j, idx + 1) || backWord(board, word, i, j - 1, idx + 1);
         board[i][j] = tmp;
         return flag;
+    }
+
+    /*----------------------------------------------------------------------*/
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        backPartition(res, new ArrayList<>(), s, 0, s.length());
+        return res;
+    }
+
+    private void backPartition(List<List<String>> res, ArrayList<String> path, String s, int start, int len) {
+        if (start == len) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = start; i < len; i++) {
+            if (!isPalindrome(s, start, i)) {
+                continue;
+            }
+            path.add(s.substring(start, i + 1));
+            backPartition(res, path, s, i + 1, len);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    private boolean isPalindrome(String str, int left, int right) {
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
 }
