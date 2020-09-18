@@ -407,7 +407,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
 ### LinkedTransferQueue
 - 队列无界
 - 底层是链表
-- 无锁
+- 无锁(CAS)
 ```java
 public class LinkedTransferQueue<E> extends AbstractQueue<E>
     implements TransferQueue<E>, java.io.Serializable {
@@ -510,7 +510,55 @@ public class LinkedTransferQueue<E> extends AbstractQueue<E>
     
 }
 ```
+### SynchronousQueue
+- 队列不存储数据
+- 无锁(CAS)
+```java
 
+public class SynchronousQueue<E> extends AbstractQueue<E>
+    implements BlockingQueue<E>, java.io.Serializable {
+
+    private transient volatile Transferer<E> transferer;
+
+    public SynchronousQueue() {
+        this(false);
+    }
+    // if true, waiting threads contend in FIFO order for access; 
+    // otherwise the order is unspecified.
+    public SynchronousQueue(boolean fair) {
+        transferer = fair ? new TransferQueue<E>() : new TransferStack<E>();
+    }    
+
+    public boolean offer(E e) {
+        if (e == null) throw new NullPointerException();
+        return transferer.transfer(e, true, 0) != null;
+    }
+
+    public void put(E e) throws InterruptedException {
+        if (e == null) throw new NullPointerException();
+        if (transferer.transfer(e, false, 0) == null) {
+            Thread.interrupted();
+            throw new InterruptedException();
+        }
+    }
+
+    public E poll() {
+        return transferer.transfer(null, true, 0);
+    }
+
+    public E take() throws InterruptedException {
+        E e = transferer.transfer(null, false, 0);
+        if (e != null)
+            return e;
+        Thread.interrupted();
+        throw new InterruptedException();
+    }
+
+    public int size() {
+        return 0;
+    }
+}
+```
 ### PriorityBlockingQueue
 - 队列无界
 - 底层是堆heap
