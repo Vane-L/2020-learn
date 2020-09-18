@@ -408,10 +408,17 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
 - 队列无界
 - 底层是链表
 - 无锁(CAS)
+- 匹配方式
+    - 消费者线程取元素时，如果队列不为空，则直接取走数据，若队列为空，那就生成一个null节点入队，然后消费者线程被等待在这个节点上
+    - 后面生产者线程入队时发现有一个null节点，生产者线程就不入队了，直接就将元素填充到该节点，并唤醒该节点等待的线程
+    - 被唤醒的消费者线程取走元素，从调用的方法返回
 - 节点类型(isData)
     - 数据节点
     - 请求节点
-- 参考资料：https://segmentfault.com/a/1190000016460411
+- 参考资料
+    - [https://segmentfault.com/a/1190000016460411]
+    - [https://blog.csdn.net/qq_39470742/article/details/90172745]
+    - [https://blog.csdn.net/qq_38293564/article/details/80593821]
 ```java
 public class LinkedTransferQueue<E> extends AbstractQueue<E>
     implements TransferQueue<E>, java.io.Serializable {
