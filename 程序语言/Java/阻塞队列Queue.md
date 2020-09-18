@@ -408,6 +408,10 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
 - 队列无界
 - 底层是链表
 - 无锁(CAS)
+- 节点类型(isData)
+    - 数据节点
+    - 请求节点
+- 参考资料：https://segmentfault.com/a/1190000016460411
 ```java
 public class LinkedTransferQueue<E> extends AbstractQueue<E>
     implements TransferQueue<E>, java.io.Serializable {
