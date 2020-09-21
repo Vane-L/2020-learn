@@ -2,8 +2,10 @@ package com.liang.backtrack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: wenhongliang
@@ -24,6 +26,7 @@ public class BackTrack {
         System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcced"));
         System.out.println(new BackTrack().exist(new char[][]{{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}}, "abcb"));
         new BackTrack().partition("aab");
+        new BackTrack().permuteUnique(new int[]{1, 1, 2});
     }
 
     public List<String> generateParenthesis(int n) {
@@ -338,4 +341,33 @@ public class BackTrack {
         return true;
     }
 
+    /*----------------------------------------------------------------------*/
+    // 输入: [1,1,2]
+    //输出:  [ [1,1,2], [1,2,1], [2,1,1] ]
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        boolean[] used = new boolean[nums.length];
+        backUnique(res, nums, used, new ArrayList<>());
+        return new ArrayList<>(res);
+    }
+
+    private void backUnique(List<List<Integer>> res, int[] nums, boolean[] used, ArrayList<Integer> tmp) {
+        if (tmp.size() == nums.length) {
+            res.add(new ArrayList<>(tmp));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            // 当前值已用 OR 当前值==前一个值
+            if (used[i] || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1])) {
+                continue;
+            }
+            tmp.add(nums[i]);
+            used[i] = true;
+            backUnique(res, nums, used, tmp);
+            used[i] = false;
+            tmp.remove(tmp.size() - 1);
+        }
+    }
 }
