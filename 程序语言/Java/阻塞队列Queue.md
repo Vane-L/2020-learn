@@ -416,6 +416,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
     - 数据节点
     - 请求节点
 - 参考资料
+    - 'LinkedTransferQueue是ConcurrentLinkedQueue、SynchronousQueue（公平模式下转交元素）、LinkedBlockingQueue（阻塞Queue的基本方法）的超集。'
     - [https://segmentfault.com/a/1190000016460411]
     - [https://blog.csdn.net/qq_39470742/article/details/90172745]
     - [https://blog.csdn.net/qq_38293564/article/details/80593821]
