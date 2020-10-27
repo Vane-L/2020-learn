@@ -1,10 +1,18 @@
 package com.liang.list;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import javax.xml.soap.Node;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Stack;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.logging.Handler;
 
 /**
  * @Author: wenhongliang
@@ -96,6 +104,64 @@ public class Medium {
             p.next = q.next;
             q.next = p;
             tmp = p;
+        }
+        return dummy.next;
+    }
+
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        List<Integer> list = new ArrayList<>();
+        ListNode tmp = head;
+        while (tmp != null) {
+            list.add(tmp.val);
+            tmp = tmp.next;
+        }
+        Collections.sort(list);
+        tmp = head;
+        int i = 0;
+        while (tmp != null) {
+            tmp.val = list.get(i++);
+            tmp = tmp.next;
+        }
+        return head;
+
+        /*ListNode dummy = new ListNode(0);
+        ListNode newHead = dummy;
+        for (int x : list) {
+            dummy.next = new ListNode(x);
+            dummy = dummy.next;
+        }
+        return newHead.next;*/
+    }
+
+    /**
+     * 输入: -1->5->3->4->0
+     * 输出: -1->0->3->4->5
+     */
+    public ListNode insertionSortList2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode pre = head, cur = head.next;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        while (cur != null) {
+            if (pre.val < cur.val) {
+                pre = cur;
+                cur = cur.next;
+            } else {
+                ListNode p = dummy;
+                // 从head开始找
+                while (p.next != cur && p.next.val < cur.val) {
+                    p = p.next;
+                }
+                pre.next = cur.next;
+                cur.next = p.next;
+                p.next = cur;
+                cur = pre.next;
+            }
         }
         return dummy.next;
     }
