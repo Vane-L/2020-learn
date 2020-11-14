@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @Author: wenhongliang
  */
-public class Easy {
+public class EasyNum {
 
     /**
      * 输入: cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
@@ -221,8 +221,31 @@ public class Easy {
         return res;
     }
 
+    /**
+     * 输入：arr1 = [2,3,1,3,2,4,6,7,9,2,19], arr2 = [2,1,4,3,9,6]
+     * 输出：      [2,2,2,1,4,3,3,9,6,7,19]
+     */
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        int[] bucket = new int[1001];
+        for (int num : arr1) {
+            bucket[num]++;
+        }
+        int i = 0;
+        for (int num : arr2) {
+            while (bucket[num]-- > 0) {
+                arr1[i++] = num;
+            }
+        }
+        for (int j = 0; j < 1001; ++j) {
+            while (bucket[j]-- > 0) {
+                arr1[i++] = j;
+            }
+        }
+        return arr1;
+    }
+
     public static void main(String[] args) {
-        Easy easy = new Easy();
+        EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));
         System.out.println(easy.maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
         System.out.println(easy.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));

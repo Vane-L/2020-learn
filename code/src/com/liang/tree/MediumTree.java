@@ -1,10 +1,7 @@
 package com.liang.tree;
 
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -76,5 +73,38 @@ public class MediumTree {
             }
         }
         return res;
+    }
+
+    /**
+     * 叶节点 是二叉树中没有子节点的节点
+     * 树的根节点的 深度 为 0，如果某一节点的深度为 d，那它的子节点的深度就是 d+1
+     * 如果我们假定 A 是一组节点 S 的 最近公共祖先，S 中的每个节点都在以 A 为根节点的子树中，且 A 的深度达到此条件下可能的最大值。
+     */
+
+
+    int maxDepth;
+    TreeNode ancestor;
+
+    public TreeNode lcaDeepestLeaves1123(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        dfs(root, 0);
+        return ancestor;
+    }
+
+    private int dfs(TreeNode root, int depth) {
+        if (root == null) {
+            return depth;
+        }
+        depth++;
+        int left = dfs(root.left, depth);
+        int right = dfs(root.right, depth);
+        depth = Math.max(left, right);
+        if (left == right && depth > maxDepth) {
+            maxDepth = depth;
+            ancestor = root;
+        }
+        return depth;
     }
 }
