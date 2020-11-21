@@ -6,14 +6,24 @@ package com.book;
 public class ArrayProblem {
     public static void main(String[] args) {
         ArrayProblem ap = new ArrayProblem();
-        int[][] matrix = new int[][]{
+        ap.orderPrint(new int[][]{
                 {1, 2, 3, 4},
                 {5, 6, 7, 8},
                 {9, 10, 11, 12},
                 {13, 14, 15, 16}
-        };
-        ap.orderPrint(matrix);
-        ap.rotate(matrix);
+        });
+        ap.rotate(new int[][]{
+                {1, 2, 3, 4},
+                {5, 6, 7, 8},
+                {9, 10, 11, 12},
+                {13, 14, 15, 16}
+        });
+        System.out.println("----------");
+        ap.printZigZag(new int[][]{
+                {1, 2, 3, 4},
+                {5, 6, 7, 8},
+                {9, 10, 11, 12},
+        });
     }
 
     public void orderPrint(int[][] matrix) {
@@ -63,10 +73,37 @@ public class ArrayProblem {
         int times = dC - tC;
         for (int i = 0; i != times; i++) {
             int tmp = m[tR][tC + i];
-            m[tR][tC + i] = m[dR-i][tC];
-            m[dR-i][tC] = m[dR][dC - i];
+            m[tR][tC + i] = m[dR - i][tC];
+            m[dR - i][tC] = m[dR][dC - i];
             m[dR][dC - i] = m[tR + i][dC];
             m[tR + i][dC] = tmp;
+        }
+    }
+
+    public void printZigZag(int[][] matrix) {
+        int tR = 0, tC = 0, dR = 0, dC = 0;
+        int r = matrix.length - 1, c = matrix[0].length - 1;
+        boolean fromUp = false;
+        while (tR != r + 1) {
+            printLevel(matrix, tR, tC, dR, dC, fromUp);
+            tR = tC == c ? tR + 1 : tR;
+            tC = tC == c ? tC : tC + 1;
+            dC = dR == r ? dC + 1 : dC;
+            dR = dR == r ? dR : dR + 1;
+            fromUp = !fromUp;
+        }
+        System.out.println();
+    }
+
+    private void printLevel(int[][] matrix, int tR, int tC, int dR, int dC, boolean fromUp) {
+        if (fromUp) {
+            while (tR != dR + 1) {
+                System.out.print(matrix[tR++][tC--] + " ");
+            }
+        } else {
+            while (dR != tR - 1) {
+                System.out.print(matrix[dR--][dC++] + " ");
+            }
         }
     }
 }
