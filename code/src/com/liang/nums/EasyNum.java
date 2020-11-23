@@ -244,6 +244,49 @@ public class EasyNum {
         return arr1;
     }
 
+
+    // leetcode 29
+    public int[] spiralOrder(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return new int[0];
+        }
+        int tR = 0, tC = 0;
+        int dR = matrix.length - 1, dC = matrix[0].length - 1;
+        int[] res = new int[(dR + 1) * (dC + 1)];
+        int idx = 0;
+        while (tR <= dR && tC <= dC) {
+            if (tR == dR) {
+                for (int i = tC; i <= dC; i++) {
+                    res[idx++] = matrix[tR][i];
+                }
+            } else if (tC == dC) {
+                for (int i = tR; i <= dR; i++) {
+                    res[idx++] = matrix[i][tC];
+                }
+            } else {
+                int curR = tR;
+                int curC = tC;
+                while (curC != dC) {
+                    res[idx++] = matrix[curR][curC++];
+                }
+                while (curR != dR) {
+                    res[idx++] = matrix[curR++][curC];
+                }
+                while (curC != tC) {
+                    res[idx++] = matrix[curR][curC--];
+                }
+                while (curR != tR) {
+                    res[idx++] = matrix[curR--][curC];
+                }
+            }
+            tR++;
+            tC++;
+            dR--;
+            dC--;
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));
