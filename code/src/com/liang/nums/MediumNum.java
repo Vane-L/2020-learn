@@ -8,6 +8,11 @@ import java.util.Map;
  * @Author: wenhongliang
  */
 public class MediumNum {
+    public static void main(String[] args) {
+        MediumNum medium = new MediumNum();
+        System.out.println(medium.longestWPI(new int[]{9, 9, 6, 0, 6, 6, 9}));
+    }
+
     /**
      * 给你一份工作时间表 hours，上面记录着某一位员工每天的工作小时数。
      * 我们认为当员工一天中的工作小时数大于 8 小时的时候，那么这一天就是「劳累的一天」。

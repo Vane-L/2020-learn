@@ -287,6 +287,84 @@ public class EasyNum {
         return res;
     }
 
+    /**
+     * 给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+     */
+    public int[] maxSlidingWindow59(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k > nums.length) {
+            return new int[0];
+        }
+        int len = nums.length;
+        int[] res = new int[len - k + 1];
+        int maxIdx = -1, max = Integer.MIN_VALUE;
+        for (int i = 0; i < len - k + 1; i++) {
+            if (maxIdx >= i) { //判断最大值下标是否在滑动窗口的范围内
+                //只需要比较最后面的值是否大于上一个窗口最大值
+                if (nums[i + k - 1] > max) {
+                    max = nums[i + k - 1];
+                    maxIdx = i + k - 1;
+                }
+            } else {   //如果不在窗口的范围内就需要重新寻找当前窗口最大值
+                max = nums[i];
+                for (int j = i; j < i + k; j++) {
+                    if (max < nums[j]) {
+                        max = nums[j];
+                        maxIdx = j;
+                    }
+                }
+            }
+            res[i] = max;
+        }
+        return res;
+    }
+
+    /**
+     * 给定由一些正数（代表长度）组成的数组 A，返回由其中三个长度组成的、面积不为零的三角形的最大周长。
+     * 如果不能形成任何面积不为零的三角形，返回 0。
+     * 思路：任意两边之和大于第三边 => 三边之和最大
+     */
+    public int largestPerimeter976(int[] A) {
+        Arrays.sort(A);
+        for (int i = A.length - 1; i >= 2; i--) {
+            if (A[i - 2] + A[i - 1] > A[i]) {
+                return A[i - 2] + A[i - 1] + A[i];
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 给定一个按非递减顺序排序的整数数组 A，返回每个数字的平方组成的新数组，要求也按非递减顺序排序。
+     * 输入：[-4,-1,0,3,10]
+     * 输出：[0,1,9,16,100]
+     */
+    public int[] sortedSquares1(int[] A) {
+        for (int i = 0; i < A.length; i++) {
+            A[i] *= A[i];
+        }
+        Arrays.sort(A);
+        return A;
+    }
+
+    public int[] sortedSquares2(int[] A) {
+        int len = A.length;
+        int[] res = new int[len];
+        int left = 0, right = len - 1;
+        int k = len - 1;
+        while (left <= right) {
+            int x = A[left] * A[left];
+            int y = A[right] * A[right];
+            if (x < y) {
+                res[k--] = y;
+                right--;
+            } else {
+                res[k--] = x;
+                left++;
+            }
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));
