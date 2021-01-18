@@ -365,6 +365,28 @@ public class EasyNum {
         return res;
     }
 
+    /**
+     * 在一个 XY 坐标系中有一些点，我们用数组 coordinates 来分别记录它们的坐标，其中 coordinates[i] = [x, y] 表示横坐标为 x、纵坐标为 y 的点。
+     * 请你来判断，这些点是否在该坐标系中属于同一条直线上，是则返回 true，否则请返回 false。
+     */
+    public boolean checkStraightLine(int[][] coordinates) {
+        if (coordinates == null || coordinates.length <= 2) {
+            return true;
+        }
+        int x1 = coordinates[0][0], y1 = coordinates[0][1];
+        int x2 = coordinates[1][0], y2 = coordinates[1][1];
+        int a = y2 - y1;
+        int b = x1 - x2;
+        int c = -a * x1 - b * y1;
+        for (int i = 2; i < coordinates.length; i++) {
+            int x = coordinates[i][0], y = coordinates[i][1];
+            if (a * x + b * y + c != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));
@@ -372,6 +394,8 @@ public class EasyNum {
         System.out.println(easy.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
         System.out.println(easy.threeSum(new int[]{0, 0, 0}));
         System.out.println(easy.fourSum(new int[]{1, 0, -1, 0, -2, 2}, 0));
+        System.out.println(easy.checkStraightLine(new int[][]{{1, 2}, {2, 3}, {3, 4}, {5, 6}, {6, 7}}));
+        System.out.println(easy.checkStraightLine(new int[][]{{1, 2}, {2, 3}, {3, 4}, {5, 6}, {7, 7}}));
     }
 
 }
