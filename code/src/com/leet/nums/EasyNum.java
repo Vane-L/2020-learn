@@ -387,6 +387,51 @@ public class EasyNum {
         return true;
     }
 
+    public int[] diStringMatch(String S) {
+        int n = S.length();
+        int[] res = new int[n + 1];
+        int index = 0, left = 0, right = n;
+        for (char c : S.toCharArray()) {
+            if (c == 'I') {
+                res[index++] = left++;
+            } else {
+                res[index++] = right--;
+            }
+        }
+        res[index] = left;
+        return res;
+    }
+
+    // 有效的时间为 00:00 到 23:59
+    public String maximumTime(String time) {
+        char[] chars = time.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '?') {
+                if (i == 0) {
+                    if (chars[i + 1] > '3') {
+                        chars[i] = '1';
+                    } else {
+                        chars[i] = '2';
+                    }
+                }
+                if (i == 1) {
+                    if (chars[i - 1] == '2') {
+                        chars[i] = '3';
+                    } else {
+                        chars[i] = '9';
+                    }
+                }
+                if (i == 3) {
+                    chars[i] = '5';
+                }
+                if (i == 4) {
+                    chars[i] = '9';
+                }
+            }
+        }
+        return String.valueOf(chars);
+    }
+
     public static void main(String[] args) {
         EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));

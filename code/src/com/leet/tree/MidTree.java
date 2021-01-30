@@ -56,4 +56,30 @@ public class MidTree {
         return root;
     }
 
+    int maxDepth;
+    TreeNode ancestor;
+
+    // 获取所有深度最大节点的子树
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        subtree(root, 0);
+        return ancestor;
+    }
+
+    private int subtree(TreeNode root, int depth) {
+        if (root == null) {
+            return depth;
+        }
+        depth++;
+        int left = subtree(root.left, depth);
+        int right = subtree(root.right, depth);
+        depth = Math.max(left, right);
+        if (left == right && depth >= maxDepth) {
+            maxDepth = depth;
+            ancestor = root;
+        }
+        return depth;
+    }
 }
