@@ -432,6 +432,22 @@ public class EasyNum {
         return String.valueOf(chars);
     }
 
+    public boolean isMonotonic(int[] A) {
+        if (A == null || A.length == 0) {
+            return false;
+        }
+        boolean left = true, right = true;
+        for (int i = 1; i < A.length; i++) {
+            if (A[i - 1] > A[i]) {
+                left = false;
+            }
+            if (A[i - 1] < A[i]) {
+                right = false;
+            }
+        }
+        return left || right;
+    }
+
     public static void main(String[] args) {
         EasyNum easy = new EasyNum();
         System.out.println(easy.climbStairs(5));
