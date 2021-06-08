@@ -16,7 +16,7 @@ public class CyclicBarrierTest {
         @Override
         public void run() {
             try {
-                System.out.println(Thread.currentThread().getName() + ":" + cyclicBarrier.getNumberWaiting());
+                System.out.println(Thread.currentThread().getName());
                 cyclicBarrier.await();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -25,9 +25,9 @@ public class CyclicBarrierTest {
     }
 
     public static void main(String[] args) {
-        cyclicBarrier = new CyclicBarrier(THREAD_COUNT, () -> System.out.println("abc"));
+        cyclicBarrier = new CyclicBarrier(THREAD_COUNT, () -> System.out.println("new cycle"));
 
-        for (int i = 0; i < THREAD_COUNT; i++) {
+        for (int i = 0; i < 2 * THREAD_COUNT; i++) {
             Thread thread = new Thread(new CyclicBarrierThread());
             thread.start();
         }

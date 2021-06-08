@@ -18,7 +18,7 @@ public class CountdownLatchTest {
         CountDownLatch countDownLatch = new CountDownLatch(num);
         for (int i = 0; i < num; i++) {
             new Thread(() -> {
-                System.out.println("Run at " + countDownLatch.getCount());
+                System.out.println("Run at " + Thread.currentThread().getName());
                 countDownLatch.countDown();
             }).start();
         }
