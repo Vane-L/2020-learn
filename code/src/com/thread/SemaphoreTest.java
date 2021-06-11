@@ -45,4 +45,22 @@ public class SemaphoreTest {
         }
     }
 
+    public class MySemaphore {
+
+        private boolean signal = false;
+        // 可计数的信号量
+        private int signals = 0;
+
+        public synchronized void take() {
+            //this.signal = true;
+            this.signals++;
+            this.notify();
+        }
+
+        public synchronized void release() throws InterruptedException {
+            //while (!this.signal) wait();
+            while (this.signals == 0) wait();
+            this.signal = false;
+        }
+    }
 }
