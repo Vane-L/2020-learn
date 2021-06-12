@@ -1,7 +1,12 @@
 package com.leet.tree;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -106,5 +111,63 @@ public class MediumTree {
             ancestor = root;
         }
         return depth;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        boolean flag = false;
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                if (!flag) {
+                    TreeNode tmp = queue.pollFirst();
+                    list.add(tmp.val);
+                    if (tmp.right != null) {
+                        queue.addLast(tmp.right);
+                    }
+                    if (tmp.left != null) {
+                        queue.addLast(tmp.left);
+                    }
+                } else {
+                    TreeNode tmp = queue.pollLast();
+                    list.add(tmp.val);
+                    if (tmp.left != null) {
+                        queue.addFirst(tmp.left);
+                    }
+                    if (tmp.right != null) {
+                        queue.addFirst(tmp.right);
+                    }
+                }
+            }
+            flag = !flag;
+            res.add(list);
+        }
+        return res;
+    }
+
+    Map<Integer, Integer> map = new HashMap<>();
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return dfs(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    public TreeNode dfs(int[] preorder, int ps, int pe, int[] inorder, int is, int ie) {
+        if (ps > pe || is > ie) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[ps]);
+        int idx = map.get(preorder[ps]);
+        root.left = dfs(preorder, ps + 1, ps + idx - is, inorder, is, idx - 1);
+        root.right = dfs(preorder, ps + idx - is + 1, pe, inorder, idx + 1, ie);
+        return root;
     }
 }

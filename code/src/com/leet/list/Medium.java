@@ -157,4 +157,23 @@ public class Medium {
         }
         return dummy.next;
     }
+
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        // 奇数
+        ListNode odd = head;
+        // 偶数
+        ListNode even = odd.next;
+        ListNode evenHead = even;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
 }
