@@ -208,6 +208,18 @@ public class MediumTree {
         if (root == null) {
             return 0;
         }
+        int left = minDepth1(root.left);
+        int right = minDepth1(root.right);
+        if (root.left == null || root.right == null) {
+            return left + right + 1;
+        }
+        return Math.min(minDepth1(root.left), minDepth1(root.right)) + 1;
+    }
+
+    public int minDepth2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
         if (root.left == null) {
             return minDepth1(root.right) + 1;
         }
@@ -252,5 +264,6 @@ public class MediumTree {
         root.right.right.right.right = new TreeNode(9);
         System.out.println(new MediumTree().minDepth(root));
         System.out.println(new MediumTree().minDepth1(root));
+        System.out.println(new MediumTree().minDepth2(root));
     }
 }
