@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -169,5 +168,40 @@ public class MediumTree {
         root.left = dfs(preorder, ps + 1, ps + idx - is, inorder, is, idx - 1);
         root.right = dfs(preorder, ps + idx - is + 1, pe, inorder, idx + 1, ie);
         return root;
+    }
+
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        String strS = serialize(s);
+        String strT = serialize(t);
+
+        return strS.contains(strT);
+    }
+
+    public String serialize(TreeNode s) {
+        StringBuilder sb = new StringBuilder();
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(s);
+        while (!stack.isEmpty()) {
+            TreeNode tmp = stack.pop();
+            sb.append(",").append(tmp == null ? "#" : tmp.val);
+            if (tmp != null) {
+                stack.push(tmp.left);
+                stack.push(tmp.right);
+            }
+        }
+        return sb.toString();
+    }
+
+    public boolean isSubtreeDFS(TreeNode s, TreeNode t) {
+        if (s == null) return false;
+        if (isSame(s, t)) return true;
+        return isSubtreeDFS(s.left, t) || isSubtreeDFS(s.right, t);
+    }
+
+    private boolean isSame(TreeNode s, TreeNode t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (s.val != t.val) return false;
+        return isSame(s.left, t.left) && isSame(s.right, t.right);
     }
 }
