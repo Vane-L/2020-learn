@@ -84,8 +84,6 @@ public class MediumTree {
      * 树的根节点的 深度 为 0，如果某一节点的深度为 d，那它的子节点的深度就是 d+1
      * 如果我们假定 A 是一组节点 S 的 最近公共祖先，S 中的每个节点都在以 A 为根节点的子树中，且 A 的深度达到此条件下可能的最大值。
      */
-
-
     int maxDepth;
     TreeNode ancestor;
 
@@ -203,5 +201,56 @@ public class MediumTree {
         if (s == null || t == null) return false;
         if (s.val != t.val) return false;
         return isSame(s.left, t.left) && isSame(s.right, t.right);
+    }
+
+
+    public int minDepth1(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null) {
+            return minDepth1(root.right) + 1;
+        }
+        if (root.right == null) {
+            return minDepth1(root.left) + 1;
+        }
+        return Math.min(minDepth1(root.left), minDepth1(root.right)) + 1;
+    }
+
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        getDepth(root, 1);
+        return min;
+    }
+
+    int min = Integer.MAX_VALUE;
+
+    private void getDepth(TreeNode root, int depth) {
+        if (root == null) {
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            min = Math.min(min, depth);
+            return;
+        }
+        getDepth(root.left, depth + 1);
+        getDepth(root.right, depth + 1);
+    }
+
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.right = new TreeNode(6);
+        //root.left.right.left = new TreeNode(7);
+        //root.left.right.right.left = new TreeNode(8);
+        root.right = new TreeNode(3);
+        root.right.right = new TreeNode(4);
+        root.right.right.right = new TreeNode(5);
+        root.right.right.right.right = new TreeNode(9);
+        System.out.println(new MediumTree().minDepth(root));
+        System.out.println(new MediumTree().minDepth1(root));
     }
 }
