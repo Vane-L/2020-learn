@@ -33,6 +33,35 @@ public class Medium {
         return dummy.next;
     }
 
+    public ListNode mergeList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode leftHead = head, rightHead = slow.next;
+        slow.next = null;
+        leftHead = mergeList(leftHead);
+        rightHead = mergeList(rightHead);
+        ListNode dummy = new ListNode(0);
+        ListNode tmp = dummy;
+        while (leftHead != null && rightHead != null) {
+            if (leftHead.val < rightHead.val) {
+                tmp.next = leftHead;
+                leftHead = leftHead.next;
+            } else {
+                tmp.next = rightHead;
+                rightHead = rightHead.next;
+            }
+            tmp = tmp.next;
+        }
+        tmp.next = leftHead == null ? rightHead : leftHead;
+        return dummy.next;
+    }
+
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
