@@ -3,7 +3,9 @@ package com.leet.list;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: wenhongliang
@@ -192,5 +194,33 @@ public class Top {
             }
         }
         return res;
+    }
+
+    public int maxArea(int[] height) {
+        int res = 0;
+        int i = 0, j = height.length - 1;
+        while (i < j) {
+            if (height[i] < height[j]) {
+                res = Math.max(res, (j - i) * height[i]);
+                i++;
+            } else {
+                res = Math.max(res, (j - i) * height[j]);
+                j--;
+            }
+        }
+        return res;
+    }
+
+    public int firstMissingPositive(int[] nums) {
+        int len = nums.length;
+        Set<Integer> hashSet = new HashSet<>();
+        for (int num : nums) {
+            hashSet.add(num);
+        }
+        for (int i = 1; i <= len; i++) {
+            if (!hashSet.contains(i))
+                return i;
+        }
+        return len + 1;
     }
 }

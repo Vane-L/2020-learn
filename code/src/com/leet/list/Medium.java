@@ -129,6 +129,25 @@ public class Medium {
         return dummy.next;
     }
 
+    public ListNode swapPairsDFS(ListNode head) {
+        // 只有一个节点
+        if (head == null || head.next == null) {
+            return head;
+        }
+        // 2个节点
+        if (head.next.next == null) {
+            ListNode second = head.next;
+            head.next = null;
+            second.next = head;
+            return second;
+        }
+        ListNode sessor = swapPairsDFS(head.next.next);
+        ListNode newHead = head.next;
+        newHead.next = head;
+        head.next = sessor;
+        return newHead;
+    }
+
     public ListNode insertionSortList(ListNode head) {
         if (head == null) {
             return null;
