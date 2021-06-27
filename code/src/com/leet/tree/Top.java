@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -229,6 +231,43 @@ public class Top {
             }
         }
         return res;
+    }
+
+    public List<TreeNode> generateTrees(int n) {
+        if (n == 0) {
+            return new ArrayList<>();
+        }
+        return build(1, n);
+    }
+
+    private List<TreeNode> build(int start, int end) {
+        List<TreeNode> list = new ArrayList<>();
+        if (start > end) {
+            list.add(null);
+            return list;
+        }
+        for (int i = start; i <= end; i++) {
+            List<TreeNode> left = build(start, i - 1);
+            List<TreeNode> right = build(i + 1, end);
+            for (TreeNode x : left) {
+                for (TreeNode y : right) {
+                    TreeNode node = new TreeNode(i);
+                    node.left = x;
+                    node.right = y;
+                    list.add(node);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int numTrees(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= i; j++)
+                dp[i] += dp[j - 1] * dp[i - j];
+        return dp[n];
     }
 
 }
