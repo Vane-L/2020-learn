@@ -1,9 +1,9 @@
 package demo;
 
 import com.baidu.brpc.RpcContext;
-import com.baidu.brpc.example.standard.Echo;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import proto.Echo;
 
 /**
  * @Author: wenhongliang

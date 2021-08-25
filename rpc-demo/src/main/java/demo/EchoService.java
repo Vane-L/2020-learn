@@ -1,7 +1,7 @@
 package demo;
 
-import com.baidu.brpc.example.standard.Echo;
 import com.baidu.brpc.protocol.BrpcMeta;
+import proto.Echo;
 
 /**
  * @Author: wenhongliang
