@@ -1,0 +1,7 @@
+# Application Name
+spring:
+  application:
+    name: Sofa Boot Demo
+  # logging path
+logging:
+  path: ./sofa-boot-demo/logs

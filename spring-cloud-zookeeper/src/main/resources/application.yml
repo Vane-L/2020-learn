@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: zk-base
+  cloud:
+#    loadbalancer:
+#      cache:
+#        ttl: 10000
+#        enabled: true
+#      ribbon:
+#        enabled: false
+    zookeeper:
+      connect-string: localhost:2181
+      discovery:
+        enabled: true
+        register: true
+        root: /services
+      dependency:
+        ribbon:
+          enabled: false
+          loadbalancer: false
+        resttemplate:
+          enabled: false
+      dependencies:
+        zk-demo:
+          path: zk-demo
+          loadBalancerType: ROUND_ROBIN
+          require: false

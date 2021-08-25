@@ -1,0 +1,5 @@
+local:
+  ip: 192.168.1.111
+  name: test
+  port: 9092
+  url: http://${local.ip}:${local.port}
