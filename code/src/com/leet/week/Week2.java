@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 /**
  * @Author: wenhongliang
  */
-public class WeekTwo {
+public class Week2 {
     /**
      * 输入：s = "iloveleetcode", words = ["i","love","leetcode","apples"]
      * 输出：true

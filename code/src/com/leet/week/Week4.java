@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @Author: wenhongliang
  */
-public class WeekFour {
+public class Week4 {
 
     /**
      * 最大公约数

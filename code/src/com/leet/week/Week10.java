@@ -9,7 +9,7 @@ import java.util.TreeMap;
 /**
  * @Author: wenhongliang
  */
-public class WeekTen {
+public class Week10 {
 
     /**
      * Easy

@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @Author: wenhongliang
  */
-public class WeekThree {
+public class Week3 {
     /**
      * 输入：patterns = ["a","abc","bc","d"], word = "abc"
      * 输出：3

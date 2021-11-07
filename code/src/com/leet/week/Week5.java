@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * @Author: wenhongliang
  */
-public class WeekFive {
+public class Week5 {
     /**
      * 学生分数的最小差值
      * 给你一个 下标从 0 开始 的整数数组 nums ，其中 nums[i] 表示第 i 名学生的分数。另给你一个整数 k 。

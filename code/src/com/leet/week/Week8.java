@@ -8,7 +8,7 @@ import java.util.TreeMap;
 /**
  * @Author: wenhongliang
  */
-public class WeekEight {
+public class Week8 {
     /**
      * Easy 暴力破解
      * 给你三个整数数组 nums1、nums2 和 nums3 ，请你构造并返回一个 不同 数组，且由 至少 在 两个 数组中出现的所有值组成。

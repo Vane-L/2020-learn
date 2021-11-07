@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @Author: wenhongliang
  */
-public class WeekSix {
+public class Week6 {
 
     /**
      * Easy AC

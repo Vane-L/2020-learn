@@ -4,7 +4,7 @@ package com.leet.week;
 /**
  * @Author: wenhongliang
  */
-public class WeekOne {
+public class Week1 {
     /**
      * 5830. 三除数
      * 给你一个整数 n 。如果 n 恰好有三个正除数 ，返回 true ；否则，返回 false 。

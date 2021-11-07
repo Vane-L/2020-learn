@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @Author: wenhongliang
  */
-public class WeekNine {
+public class Week9 {
 
     /**
      * Easy 暴力

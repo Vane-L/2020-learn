@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  * @Author: wenhongliang
  */
-public class WeekEleven {
+public class Week11 {
     /**
      * 转化数字的最小运算数 Medium
      * 给你一个下标从 0 开始的整数数组 nums ，该数组由 互不相同 的数字组成。另给你两个整数 start 和 goal 。
