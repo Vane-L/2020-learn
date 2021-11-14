@@ -9,7 +9,14 @@ public class FindNearestPoints {
                 {-1, 3}, {-1, -1}, {1, 1}, {2, 0.5},
                 {2, -1}, {3, 3}, {4, 2}, {4, -0.5}
         };
+        findPoints1(points);
+    }
 
+    public static double shortDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    }
+
+    public static void findPoints1(double[][] points) {
         int p1 = 0, p2 = 1;
         double min = shortDistance(points[p1][0], points[p1][1], points[p2][0], points[p2][1]);
         for (int i = 0; i < points.length; i++) {
@@ -28,7 +35,4 @@ public class FindNearestPoints {
                 + "(" + points[p2][0] + "," + points[p2][1] + ")");
     }
 
-    public static double shortDistance(double x1, double y1, double x2, double y2) {
-        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
 }
