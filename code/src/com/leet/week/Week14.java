@@ -59,44 +59,34 @@ public class Week14 {
      * 相反地，4 不是一个 2 镜像数字。4 在二进制下为 100 ，从前往后和从后往前读不相同。
      * 给你进制 k 和一个数字 n ，请你返回 k 镜像数字中 最小 的 n 个数 之和 。
      */
-    public long kMirror(int k, int n) {
-        long sum = 0;
-        for (int i = 1; i < 10; i++) {
-            if (kMirror(Long.toString(i, k))) {
-                sum += i;
-                if (--n == 0) {
-                    return sum;
-                }
+    private boolean isGood(char[] c) {
+        for (int i = 0, j = c.length - 1; i < j; i++, j--) {
+            if (c[i] != c[j]) {
+                return false;
             }
         }
-        for (int i = 0; ; i++) {
-            for (int j = (int) Math.pow(10, i); j < (int) Math.pow(10, i + 1); j++) {
-                if (kMirror(Long.toString(Long.parseLong("" + j + new StringBuilder("" + j).reverse()), k))) {
-                    sum += Long.parseLong("" + j + new StringBuilder("" + j).reverse());
-                    if (--n == 0) {
-                        return sum;
-                    }
+        return true;
+    }
+
+    public long kMirror(int k, int n) {
+        long ans = 0;
+        for (int len = 1; ; len++) {
+            int x = (int) Math.pow(10, (len - 1) / 2);
+            int y = (int) Math.pow(10, (len + 1) / 2);
+            for (int i = x; i < y; i++) {
+                long nn = i;
+                for (int j = len % 2 == 0 ? i : i / 10; j > 0; j /= 10) {
+                    nn = nn * 10 + j % 10;
                 }
-            }
-            for (int j = (int) Math.pow(10, i); j < (int) Math.pow(10, i + 1); j++) {
-                for (int l = 0; l < 10; l++) {
-                    if (kMirror(Long.toString(Long.parseLong("" + j + l + new StringBuilder("" + j).reverse()), k))) {
-                        sum += Long.parseLong("" + j + l + new StringBuilder("" + j).reverse());
-                        if (--n == 0) {
-                            return sum;
-                        }
+                String ss = Long.toString(nn, k);
+                if (isGood(ss.toCharArray())) {
+                    ans += nn;
+                    if (--n == 0) {
+                        return ans;
                     }
                 }
             }
         }
     }
 
-    private boolean kMirror(String s) {
-        for (int i = 0; i < s.length() / 2; i++) {
-            if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
