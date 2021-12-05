@@ -89,6 +89,7 @@ public class Week16 {
      * 给你一个链表的头节点 head 。删除 链表的 中间节点 ，并返回修改后的链表的头节点 head 。
      * 长度为 n 链表的中间节点是从头数起第 ⌊n / 2⌋ 个节点（下标从 0 开始），其中 ⌊x⌋ 表示小于或等于 x 的最大整数。
      * 最开始想了个快慢指针，一直解答错误，因为需要知道总长度是奇数还是偶数！！！
+     * 原来快慢指针是work的，只需要记录前一个节点即可。。。
      */
     public ListNode deleteMiddle(ListNode head) {
         if (head == null || head.next == null) return null;
@@ -186,9 +187,9 @@ public class Week16 {
      * Hard 5932. 合法重新排列数对
      */
 
-    Map<Integer, int[]> countMap = new HashMap<Integer, int[]>();
-    Map<Integer, Queue<Integer>> map = new HashMap<Integer, Queue<Integer>>();
-    List<Integer> path = new ArrayList<Integer>();
+    Map<Integer, int[]> countMap = new HashMap<>();
+    Map<Integer, Queue<Integer>> map = new HashMap<>();
+    List<Integer> path = new ArrayList<>();
 
     public int[][] validArrangement(int[][] pairs) {
         int length = pairs.length;
@@ -200,7 +201,7 @@ public class Week16 {
             countMap.get(start)[0]++;
             countMap.get(end)[1]++;
             if (!map.containsKey(start))
-                map.put(start, new ArrayDeque<Integer>());
+                map.put(start, new ArrayDeque<>());
             map.get(start).offer(end);
         }
         int source = pairs[0][0];
@@ -223,7 +224,7 @@ public class Week16 {
     }
 
     public void depthFirstSearch(int num) {
-        while (map.containsKey(num) && map.get(num).size() > 0) {
+        while (map.containsKey(num) && !map.get(num).isEmpty()) {
             int tmp = map.get(num).poll();
             depthFirstSearch(tmp);
         }
